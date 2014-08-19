@@ -86,6 +86,8 @@ do {
         if (isset($items[$key - 1])) {
             // Offset key and remove correct item from array
             unset($items[$key - 1]);
+            // Reindex numeric array of values
+            $items = array_values($items);
         }
 
         else {
