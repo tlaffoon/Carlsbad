@@ -28,6 +28,14 @@ function validateInput($input) {
 
 } // end validateInput()
 
+function saveListToFile($list, $filename = './data/list.txt') {
+
+    $handle = fopen($filename, 'w');
+    foreach ($list as $item) {
+        fwrite($handle, $item);
+    }
+}
+
 /* -------------------------------------------- */
 
 // Create array to hold list of todo items
@@ -94,6 +102,9 @@ do {
             echo "Please enter a valid item to remove." . PHP_EOL;
         }
     }
+
+    // Add sleep delay for one second before clear
+    usleep(1000000);
 
     // Run clear to provide clean interface upon each iteration
     echo shell_exec('clear');
