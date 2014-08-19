@@ -37,18 +37,24 @@ $items = array();
 do {
 
     if (empty($items)) {
-        echo "No items to display." . PHP_EOL;
+        echo PHP_EOL . "  No items to display." . PHP_EOL . PHP_EOL;
     }
 
     else {
+        // Provide header
+        echo "ToDo List" . PHP_EOL . "----------" . PHP_EOL;
+
         // Iterate through list items
         foreach ($items as $key => $item) {
             // Set displayKey offset by 1 for sanity
             $displayKey = $key + 1;
 
             // Output displayKey and list item
-            echo "{$displayKey}. {$item}" . PHP_EOL;
+            echo " {$displayKey}. {$item}" . PHP_EOL;
         }
+
+        // Additional new line for readability
+        echo PHP_EOL;
     }
 
     // Show the menu options
@@ -86,6 +92,9 @@ do {
             echo "Please enter a valid item to remove." . PHP_EOL;
         }
     }
+
+    // Run clear to provide clean interface upon each iteration
+    echo shell_exec('clear');
 
 // Exit when input is (Q)uit
 } while ($validatedInput != 'Q');
