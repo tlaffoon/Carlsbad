@@ -1,6 +1,12 @@
 <?php
 
+/* -------------------------------------------- */
+// Define Constants
+
 define('LISTFILE', './data/list.txt');
+
+/* -------------------------------------------- */
+// Define Functions
 
 function checkForListFile() {
     // Checks for ./data/list.txt and creates if necessary
@@ -47,18 +53,23 @@ function validateInput($input) {
 
         else {
             echo "Please enter a valid menu choice." . PHP_EOL;
+
+            // Sleep for one second
             usleep(1000000);
         }
     }
 
     else {
         echo "Please enter only letters." . PHP_EOL;
+
+        // Sleep for one second
         usleep(1000000);
     }
 
 } // end validateInput()
 
 function outputList($items) {
+// Takes in an array, and outputs a block of strings.
     if (empty($items)) {
         return PHP_EOL . "  No items to display." . PHP_EOL . PHP_EOL;
     }
@@ -66,22 +77,28 @@ function outputList($items) {
     else {
 
         // Provide header
-        $string .= "ToDo List" . PHP_EOL . "----------" . PHP_EOL;
+        $list .= "ToDo List" . PHP_EOL . "----------" . PHP_EOL;
 
         // Iterate through list items
         foreach ($items as $key => $item) {
-            // Set displayKey offset by 1 for sanity
+            // Offset array key by 1 for sanity
             $displayKey = $key + 1;
 
-            // Output displayKey and list item
-            $string .= " {$displayKey}. {$item}" . PHP_EOL;
+            // Output offset array key and list item
+            $list .= " {$displayKey}. {$item}" . PHP_EOL;
         }
 
         // Additional new line for readability
-        $string .= PHP_EOL;
+        $list .= PHP_EOL;
 
-        return $string;
+        // Return Block O' Strings
+        return $list;
     }
+}
+
+function displayPrompt() {
+    // Show the menu options
+    echo '(N)ew item, (R)emove item, (S)ave List to File, (Q)uit : ';
 }
 
 function saveList($list, $filename = './data/list.txt') {
@@ -91,60 +108,75 @@ function saveList($list, $filename = './data/list.txt') {
         fwrite($handle, $item . PHP_EOL);
     }
     fclose($handle);
-    return "Saved successfully." . PHP_EOL;
+    
+    // Output success message
+    echo "Saved successfully." . PHP_EOL;
+
+    // Sleep for one second
+    usleep(1000000);
+}
+
+function addItem($list) {
+    // Ask for entry
+    echo 'Enter item: ';
+    
+    // Add entry to list array
+    $list[] = trim(fgets(STDIN));
+
+    return $list;
+}
+
+function removeItem($list) {
+    // Remove which item?
+    echo 'Enter item number to remove: ';
+    
+    // Assign array key from user input
+    $key = trim(fgets(STDIN));
+    
+    if (isset($items[$key - 1])) {
+        // Offset key and remove correct item from array
+        unset($items[$key - 1]);
+        // Reindex numeric array of values
+        $list = array_values($items);
+        return $list;
+    }
+
+    else {
+        echo "Please enter a valid item to remove." . PHP_EOL;
+    }
 }
 
 /* -------------------------------------------- */
+// Perform Main Logic
 
-// Create array to hold list of todo items
+// Initialize array to hold list of todo items
 $items = array();
 
 // The loop!
 do {
 
+    // Output list if exists
     echo outputList($items);
 
-    // Show the menu options
-    echo '(N)ew item, (R)emove item, (S)ave List to File, (Q)uit : ';
+    // Display user prompt
+    echo displayPrompt();
 
-    // Use trim() to remove whitespace and newlines
-    // Run validation function on captured input
     // Assign output of validateInput to $validatedInput
     $validatedInput = validateInput(trim(fgets(STDIN)));
 
-    // Perform corresponding action on validated input
+    // Perform relevant action on validated input
     switch ($validatedInput) {
         case 'N':
-            // Ask for entry
-            echo 'Enter item: ';
-            
-            // Add entry to list array
-            $items[] = trim(fgets(STDIN));
-            
+            // Add Item
+            $items = addItem($items);
             break;
 
         case 'R':
-            // Remove which item?
-            echo 'Enter item number to remove: ';
-            
-            // Assign array key from user input
-            $key = trim(fgets(STDIN));
-            
-            if (isset($items[$key - 1])) {
-                // Offset key and remove correct item from array
-                unset($items[$key - 1]);
-                // Reindex numeric array of values
-                $items = array_values($items);
-            }
-
-            else {
-                echo "Please enter a valid item to remove." . PHP_EOL;
-            }
-
+            $items = removeItem($items);
             break;
 
         case 'S':
-            echo saveList($items);
+            saveList($items);
             break;
         
         default:
