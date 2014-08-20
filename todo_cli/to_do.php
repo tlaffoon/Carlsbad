@@ -51,7 +51,7 @@ function validateInput($input) {
         $input = strtoupper($input);
 
         // check for valid menu choice
-        if ($input == 'N' || $input == 'R' || $input == 'S' || $input == 'Q') {
+        if ($input == 'N' || $input == 'R' || $input == 'K' || $input == 'S' || $input == 'Q') {
                 $validatedInput = $input;
                 return $validatedInput;
         } // end menu choice check
@@ -103,7 +103,7 @@ function outputList($items) {
 
 function displayPrompt() {
     // Show the menu options
-    echo '(N)ew item, (R)emove item, (S)ave List to File, (Q)uit : ';
+    echo '(N)ew item, (R)emove item, (S)ave, (Q)uit : ';
 }
 
 function saveList($list, $filename = './data/list.txt') {
@@ -181,6 +181,11 @@ do {
         case 'R':
             // Remove Item
             $items = removeItem($items);
+            break;
+
+        case 'K':
+            // Sort List
+            sort($items);
             break;
 
         case 'S':
