@@ -13,15 +13,21 @@ function checkForListFile() {
 }
 
 function openList($filename = LISTFILE) {
-    // Checks for data in file and populates array accordingly
-    // from file strings to array items
+    // Checks for data in file
     if (file_exists($filename) && filesize($filename) > 0) {
+        // Opens file handle
         $handle = fopen($filename, 'r');
+
+        // Creates a string from file contents
         $contents = trim(fread($handle, filesize($filename)));
+
+        // Creates an array from that string
         $list = explode("\n", $contents);
 
+        // Closes file handle
         fclose($handle);
         
+        // Returns array
         return $list;
     }
 
@@ -162,8 +168,7 @@ do {
     // Display user prompt
     echo displayPrompt();
 
-    // Clean up user input on menu choices, and assign output 
-    //of validateInput to $validatedInput.
+    // Clean up user input for menu choices.
     $validatedInput = validateInput(trim(fgets(STDIN)));
 
     // Perform relevant action on validated input
@@ -174,10 +179,12 @@ do {
             break;
 
         case 'R':
+            // Remove Item
             $items = removeItem($items);
             break;
 
         case 'S':
+            // Save list to file.
             saveList($items);
             break;
         
