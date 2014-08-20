@@ -12,26 +12,25 @@ function checkForListFile() {
     // Checks for ./data/list.txt and creates if necessary
 }
 
-// function openList($filename = LISTFILE) {
-//     //
-//     if (file_exists($filename) && filesize($filename) > 0) {
-//         $handle = fopen($filename, 'r');
-//         $contents = trim(fread($handle, filesize($filename)));
-//         $contents = explode('\n', $contents);
-//         foreach ($contents as $item) {
-//             $list[] = "$item" . PHP_EOL;
-//         }
-//         fclose($handle);
+function openList($filename = LISTFILE) {
+    // Checks for data in file and populates array accordingly
+    // from file strings to array items
+    if (file_exists($filename) && filesize($filename) > 0) {
+        $handle = fopen($filename, 'r');
+        $contents = trim(fread($handle, filesize($filename)));
+        $list = explode("\n", $contents);
 
-//         return $list;
-//     }
+        fclose($handle);
+        
+        return $list;
+    }
 
-//     else {
-//         $list = array();
-//         return $list;
-//     }
+    else {
+        $list = array();
+        return $list;
+    }
     
-// }
+}
 
 function validateInput($input) {
     // Validates input for main menu choice
@@ -133,16 +132,18 @@ function removeItem($list) {
     // Assign array key from user input
     $key = trim(fgets(STDIN));
     
-    if (isset($items[$key - 1])) {
+    if (isset($list[$key - 1])) {
         // Offset key and remove correct item from array
-        unset($items[$key - 1]);
+        unset($list[$key - 1]);
         // Reindex numeric array of values
-        $list = array_values($items);
+        $list = array_values($list);
+        
         return $list;
     }
 
     else {
         echo "Please enter a valid item to remove." . PHP_EOL;
+        usleep(1000000);
     }
 }
 
@@ -150,7 +151,7 @@ function removeItem($list) {
 // Perform Main Logic
 
 // Initialize array to hold list of todo items
-$items = array();
+$items = openList();
 
 // The loop!
 do {
@@ -161,7 +162,8 @@ do {
     // Display user prompt
     echo displayPrompt();
 
-    // Assign output of validateInput to $validatedInput
+    // Clean up user input on menu choices, and assign output 
+    //of validateInput to $validatedInput.
     $validatedInput = validateInput(trim(fgets(STDIN)));
 
     // Perform relevant action on validated input
@@ -184,7 +186,8 @@ do {
             break;
     }
 
-    // Run clear to provide clean interface upon each iteration
+    //  Run clear to provide clean interface upon each iteration;
+    // and give the user a feeling of real interactivity.
     echo shell_exec('clear');
 
 // Exit when input is (Q)uit
