@@ -8,8 +8,16 @@ define('LISTFILE', './data/list.txt');
 /* -------------------------------------------- */
 // Define Functions
 
-function checkForListFile() {
+function checkForListFile($filename = LISTFILE) {
     // Checks for ./data/list.txt and creates if necessary
+    if (file_exists($filename)) {
+        // Do nothing.
+    }
+
+    else {
+        mkdir($filename);
+    }
+
 }
 
 function openList($filename = LISTFILE) {
